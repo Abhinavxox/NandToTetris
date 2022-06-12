@@ -14,18 +14,25 @@ public class Abhinav_AIE21088_CodeWriter {
 		//obj to access the methods
 		Abhinav_AIE21088_CodeWriter cw = new Abhinav_AIE21088_CodeWriter();
 		for(String line[]: alist) {
-			
+            //for comments pass the command
+            StringBuilder command =  new StringBuilder();
+            command.append("//");
+            for(int i=0; i<line.length; i++){
+                command.append(line[i]);
+                command.append(" ");
+            }
+
 			//check if it is logical
 			if(line.length == 1) {
 				switch (line[0]) {
                     case "add","sub","and","or":
-                        fw.write(cw.add_sub_method(line));
+                        fw.write(cw.add_sub_method(line,command.toString()));
                         break;
                     case "not", "neg":
-                        fw.write(cw.neg_method(line));
+                        fw.write(cw.neg_method(line,command.toString()));
                         break;
                     case "lt","gt", "eq":
-                        fw.write(cw.comparison_method(line));
+                        fw.write(cw.comparison_method(line,command.toString()));
                         break;
                 }
 			}
@@ -33,16 +40,16 @@ public class Abhinav_AIE21088_CodeWriter {
 			else {
 				switch (line[1]) {
 				case "local","argument","this","that","temp": 
-					fw.write(cw.local_arg_method(line));
+					fw.write(cw.local_arg_method(line,command.toString()));
 					break;
 				case "pointer":
-					fw.write(cw.pointer_method(line));
+					fw.write(cw.pointer_method(line,command.toString()));
 					break;
 				case "static":
-					fw.write(cw.static_method(line, filename));
+					fw.write(cw.static_method(line, filename,command.toString()));
 					break;
 				case "constant":
-					fw.write(cw.constant_method(line));
+					fw.write(cw.constant_method(line,command.toString()));
 					break;
 				}
 			}	
@@ -53,7 +60,7 @@ public class Abhinav_AIE21088_CodeWriter {
     static int counter=0;
 	
     //for local argument this that temp
-    public String local_arg_method(String arr[]){
+    public String local_arg_method(String arr[], String command){
 
         StringBuilder sb = new StringBuilder();
 
@@ -61,6 +68,7 @@ public class Abhinav_AIE21088_CodeWriter {
         //addr = segement(arr[1]) + i(arr[2])
         //*SP = *addr
         //SP++
+        sb.append(command+"\n");
         sb.append("@"+arr[2]+"\n");
         sb.append("D=A\n");
 
@@ -113,10 +121,11 @@ public class Abhinav_AIE21088_CodeWriter {
     }
 
     //for constant
-    public String constant_method(String arr[]){
+    public String constant_method(String arr[], String command){
         StringBuilder sb = new StringBuilder();
         //*sp=i
         //sp++
+        sb.append(command+"\n");
         String i = arr[2];
         sb.append("@"+i+"\n");
         sb.append("D=A\n");
@@ -130,8 +139,9 @@ public class Abhinav_AIE21088_CodeWriter {
     }
 
     //for pointer
-    public String pointer_method(String arr[]){
+    public String pointer_method(String arr[], String command){
         StringBuilder sb = new StringBuilder();
+        sb.append(command+"\n");
         if(arr[0].equals("push")){
             //*SP = *THIS
             //SP++
@@ -164,8 +174,9 @@ public class Abhinav_AIE21088_CodeWriter {
     }
 
     //for static variables
-    public String static_method(String arr[],String filename){
+    public String static_method(String arr[],String filename, String command){
         StringBuilder sb = new StringBuilder();
+        sb.append(command+"\n");
         if(arr[0].equals("push")){
             sb.append("@"+filename+"."+arr[2]+"\n");
             sb.append("D=M\n");
@@ -186,9 +197,10 @@ public class Abhinav_AIE21088_CodeWriter {
     }
 
     //for add and sub , & and |
-    public String add_sub_method(String arr[]){
+    public String add_sub_method(String arr[], String command){
 
         StringBuilder sb = new StringBuilder();
+        sb.append(command+"\n");
         sb.append("@SP\n");
         sb.append("AM=M-1\n");
         sb.append("D=M\n");
@@ -212,8 +224,9 @@ public class Abhinav_AIE21088_CodeWriter {
     }
 
     //for neg
-    public String neg_method(String arr[]){
+    public String neg_method(String arr[], String command){
         StringBuilder sb = new StringBuilder();
+        sb.append(command+"\n");
         sb.append("@SP\n");
         sb.append("AM=M-1\n");
 
@@ -229,9 +242,10 @@ public class Abhinav_AIE21088_CodeWriter {
     }
 
     //for gt and lt and eq
-    public String comparison_method(String arr[]){
+    public String comparison_method(String arr[], String command){
         counter++;
         StringBuilder sb = new StringBuilder();
+        sb.append(command+"\n");
         sb.append("@SP\n");
         sb.append("AM=M-1\n");
         sb.append("D=M\n");
