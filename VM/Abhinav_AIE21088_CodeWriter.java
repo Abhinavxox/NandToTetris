@@ -16,8 +16,18 @@ public class Abhinav_AIE21088_CodeWriter {
 		for(String line[]: alist) {
 			
 			//check if it is logical
-			if(line[0].equals("add")||line[0].equals("sub")) {
-				fw.write(cw.add_sub_method(line));
+			if(line.length == 1) {
+				switch (line[0]) {
+                    case "add","sub","and","or":
+                        fw.write(cw.add_sub_method(line));
+                        break;
+                    case "not", "neg":
+                        fw.write(cw.neg_method(line));
+                        break;
+                    case "lt","gt", "eq":
+                        fw.write(cw.comparison_method(line));
+                        break;
+                }
 			}
 			//if is for segments
 			else {
@@ -39,6 +49,8 @@ public class Abhinav_AIE21088_CodeWriter {
 		}
         fw.close();
 	}
+
+    static int counter=0;
 	
     //for local argument this that temp
     public String local_arg_method(String arr[]){
@@ -173,7 +185,7 @@ public class Abhinav_AIE21088_CodeWriter {
         return sb.toString();
     }
 
-    //for add and sub
+    //for add and sub , & and |
     public String add_sub_method(String arr[]){
 
         StringBuilder sb = new StringBuilder();
@@ -185,9 +197,67 @@ public class Abhinav_AIE21088_CodeWriter {
         if(arr[0].equals("add")){
             sb.append("M=M+D\n");
         }
-        else{
+        else if(arr[0].equals("sub")){
             sb.append("M=M-D\n");
         }
+        else if(arr[0].equals("and")){
+            sb.append("M=D&M\n");
+        }
+        else if(arr[0].equals("or")){
+            sb.append("M=D|M\n");
+        }
+        sb.append("@SP\n");
+        sb.append("M=M+1\n");
+        return sb.toString();
+    }
+
+    //for neg
+    public String neg_method(String arr[]){
+        StringBuilder sb = new StringBuilder();
+        sb.append("@SP\n");
+        sb.append("AM=M-1\n");
+
+        if(arr[0].equals("neg")){
+            sb.append("M=-M\n");
+        }
+        else if(arr[0].equals("not")){
+            sb.append("M=!M\n");
+        }
+        sb.append("@SP\n");
+        sb.append("M=M+1\n");
+        return sb.toString();
+    }
+
+    //for gt and lt and eq
+    public String comparison_method(String arr[]){
+        counter++;
+        StringBuilder sb = new StringBuilder();
+        sb.append("@SP\n");
+        sb.append("AM=M-1\n");
+        sb.append("D=M\n");
+        sb.append("@SP\n");
+        sb.append("AM=M-1\n");
+        sb.append("D=M-D\n");
+        sb.append("@IF"+counter+"\n");
+        if(arr[0].equals("gt")){
+            sb.append("D;JGT\n");
+        }
+        else if(arr[0].equals("lt")){
+            sb.append("D;JLT\n");
+        }
+        else if(arr[0].equals("eq")){
+            sb.append("D;JEQ\n");
+        }
+        sb.append("@SP\n");
+        sb.append("A=M\n");
+        sb.append("M=0\n");
+        sb.append("@END"+counter+"\n");
+        sb.append("0;JMP\n");
+        sb.append("(IF"+counter+")\n");
+        sb.append("@SP\n");
+        sb.append("A=M\n");
+        sb.append("M=-1\n");
+        sb.append("(END"+counter+")\n");
         sb.append("@SP\n");
         sb.append("M=M+1\n");
         return sb.toString();
