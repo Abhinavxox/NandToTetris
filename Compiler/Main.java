@@ -6,7 +6,7 @@ public class Main {
         String filename = "Main.jack";
         CodeWriter cw = new CodeWriter();
         Parser p = new Parser();
-        cw.writeCode(p.parse(cw.readFile(filename)), filename.split(".")[0]);
+        cw.writeCode(p.parse(cw.readFile(filename)), "Main");
     }
     
 }

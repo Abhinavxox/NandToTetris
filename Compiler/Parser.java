@@ -6,15 +6,13 @@ public class Parser extends Library{
 
     public static ArrayList<String[]> parse(ArrayList<String> alist){
         for (String line : alist) {
-            String arr[] = line.split(" ");
-            for(String x : arr){
-                ArrayList<String[]> alist2 = tokenParse(x);
+                ArrayList<String[]> alist2 = toBeSeparated(line);
                 for(String y[]: alist2){
                     forCoderWriter.add(y);
                 }
             }   
-        }
+
         return forCoderWriter;
     }
-    
+      
 }
