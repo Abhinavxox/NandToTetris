@@ -23,7 +23,7 @@ public class Assembler {
 	}
 	
 	public static void nospaces(){
-		//removes whitespaces, comments, inline comments and blank spaces anywhere found
+		//removes whitespaces, comments, in-line comments and blank spaces anywhere found
 		try {
 			File f = new File("C:/Users/abhin/Desktop/AMRITA/S2/Assembler/INPUT.asm");
 			Scanner file = new Scanner(f);
