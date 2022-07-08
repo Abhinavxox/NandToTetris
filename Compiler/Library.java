@@ -63,12 +63,6 @@ class Library{
             String arr2[] = {token,"symbol"};
             arr1 = arr2;
         }
-        // //if it is a string
-        // else if(token.matches("\"(\\.|[^\"])*\"")){
-        //     String temp = token.substring(1, token.length()-1);
-        //     String arr2[] = {token,temp};
-        //     arr1 = arr2;
-        // }
         //if it is a keyword 
         else if(keyword.contains(token)){
             String arr2[] = {token,"keyword"};

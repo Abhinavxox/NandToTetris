@@ -59,7 +59,7 @@ public class Assembler {
 	}
 	
 	//symbol table
-	static HashMap<String, Integer> record_table = new HashMap<>();
+	static HashMap<String, Integer> symbol_table = new HashMap<>();
 	
 	public static void initial_table() {
 		//add pre-defined symbols to the table
@@ -71,7 +71,7 @@ public class Assembler {
         for (int i=0;i < pre_defined_symbol.length;i++) {
             String x = pre_defined_symbol[i].split("=")[0];
             int y =  Integer.parseInt(pre_defined_symbol[i].split("=")[1]);
-            record_table.put(x, y);
+            symbol_table.put(x, y);
         }
 
             
@@ -89,7 +89,7 @@ public class Assembler {
 				String line = file.nextLine();
 				if(line.charAt(0)=='(') {
 					String sub = line.substring(1,line.length()-1);
-					record_table.put(sub, line_number);
+					symbol_table.put(sub, line_number);
 					line_number = line_number -1;
 				}
 				line_number++;
@@ -116,8 +116,8 @@ public class Assembler {
 					//if the sub is integer or not
 					if(!Character.isDigit(sub.charAt(0))) {
 						//if does not contain
-						if(!record_table.containsKey(sub)) {
-							record_table.put(sub, variable_start);
+						if(!symbol_table.containsKey(sub)) {
+							symbol_table.put(sub, variable_start);
 							variable_start++;
 						}
 					}
@@ -165,7 +165,7 @@ public class Assembler {
 				if(line.charAt(0)=='@') {
 					String sub =  line.substring(1);
 					if(!Character.isDigit(sub.charAt(0))) {
-						int value = record_table.get(sub);
+						int value = symbol_table.get(sub);
 						s.append(value);
 						pw.write(s.toString());
 						pw.write("\n");
@@ -198,7 +198,6 @@ public class Assembler {
 			while(file.hasNext()) {
 				String line = file.nextLine();
 				
-				//
 				if(line.charAt(0) == '@') {
 					String sub = line.substring(1);
 					//error
