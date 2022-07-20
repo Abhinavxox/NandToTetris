@@ -1,0 +1,3 @@
+class Main{
+    do Screen.drawRectangle(x, y, x + size, y + size);
+}

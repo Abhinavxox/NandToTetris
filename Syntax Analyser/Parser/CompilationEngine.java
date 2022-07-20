@@ -18,6 +18,7 @@ public class CompilationEngine extends Analyser {
             fw.append("<class>\n");
             fw.append("<keyword> class </keyword>\n");
             pointer++;
+            //for className
             line = readLine(pointer);
             fw.append(line+"\n");
             pointer++;
@@ -32,6 +33,7 @@ public class CompilationEngine extends Analyser {
         }
         compileClassVarDec();
         compileSubroutine();
+        // compileDo();
         line = readLine(pointer);
         if(checkSymbolType(line, "}")){
             fw.append(line+"\n");
@@ -90,24 +92,6 @@ public class CompilationEngine extends Analyser {
         compileClassVarDec();
     }
 
-    public static void compileType() throws IOException{
-        String line = readLine(pointer);
-        if(getTokenType(line) == "keyword" && (getKeywordType(line) == "int" || getKeywordType(line) == "char" || getKeywordType(line) == "boolean" )){
-            fw.append(line+"\n");
-            pointer++;
-            return;
-        }
-        else if(getTokenType(line) == "identifier"){
-            fw.append(line+"\n");
-            pointer++;
-            return;
-        }
-        else{
-            System.out.println("Error: Expected int, char, boolean, or class");
-            
-        }
-    }
-    
     public static void compileSubroutine() throws IOException{
         String line = readLine(pointer);
         if(getTokenType(line) == "symbol" && checkSymbolType(line, "}")){
@@ -161,6 +145,50 @@ public class CompilationEngine extends Analyser {
         compileSubroutine();
     }
 
+    public static void compileSubroutineBody() throws IOException{
+        String line = readLine(pointer);
+        fw.append("<subroutineBody>\n");
+        if(checkSymbolType(line, "{")){
+            fw.append(line+"\n");
+            pointer++;
+        }
+        else{
+            System.out.println("Error: Expected {");
+        }
+        compileVarDec();
+        fw.append("<statements>\n");
+         compileStatements();
+        fw.append("</statements>\n");
+        line = readLine(pointer);
+        if(checkSymbolType(line, "}")){
+            fw.append(line+"\n");
+            pointer++;
+        }
+        else{
+            System.out.println("Error: Expected }");
+        }
+        fw.append("</subroutineBody>\n");
+    }
+
+    public static void compileType() throws IOException{
+        String line = readLine(pointer);
+        if(getTokenType(line) == "keyword" && (getKeywordType(line) == "int" || getKeywordType(line) == "char" || getKeywordType(line) == "boolean")){
+            fw.append(line+"\n");
+            pointer++;
+            return;
+        }
+        else if(getTokenType(line) == "identifier"){
+            fw.append(line+"\n");
+            pointer++;
+            return;
+        }
+        else{
+            System.out.println("Error: Expected int, char, boolean, or class");
+            
+        }
+    }
+    
+
     public static void compileParameterList() throws IOException{
         String line = readLine(pointer);
         if(getTokenType(line) == "symbol" && checkSymbolType(line, ")")){
@@ -190,31 +218,6 @@ public class CompilationEngine extends Analyser {
             
         }
         compileParameterList();
-    }
-
-    public static void compileSubroutineBody() throws IOException{
-        String line = readLine(pointer);
-        fw.append("<subroutineBody>\n");
-        if(checkSymbolType(line, "{")){
-            fw.append(line+"\n");
-            pointer++;
-        }
-        else{
-            System.out.println("Error: Expected {");
-        }
-        compileVarDec();
-        fw.append("<statements>\n");
-         compileStatements();
-        fw.append("</statements>\n");
-        line = readLine(pointer);
-        if(checkSymbolType(line, "}")){
-            fw.append(line+"\n");
-            pointer++;
-        }
-        else{
-            System.out.println("Error: Expected }");
-        }
-        fw.append("</subroutineBody>\n");
     }
 
     public static void compileVarDec() throws IOException{
@@ -255,7 +258,7 @@ public class CompilationEngine extends Analyser {
 
     public static void compileExpression() throws IOException{
         String line = readLine(pointer);
-        if(getTokenType(line)!="symbol"){
+        if(getTokenType(line)!="symbol" || getSymbolType(line) == "("){
             fw.append("<expression>\n");
             fw.append("<term>\n");
             compileTerm();
@@ -276,7 +279,7 @@ public class CompilationEngine extends Analyser {
         if(getTokenType(line)=="symbol" && getSymbolType(line)==";"){
             return;
         }
-        if(getTokenType(line)=="symbol" && getSymbolType(line)!=")" && getSymbolType(line)!="]"){
+        if(getTokenType(line)=="symbol" && getSymbolType(line)!=")" && getSymbolType(line)!="]" && getSymbolType(line)!=","){
             fw.append(line+"\n");
             pointer++;
             //check if op term is there
@@ -327,7 +330,7 @@ public class CompilationEngine extends Analyser {
             fw.append(line+"\n");
             pointer++;
             //for content of expressionList
-            compileExpressionList();
+            compileExpression();
             line = readLine(pointer);
             //for )
             fw.append(line+"\n");
@@ -360,6 +363,30 @@ public class CompilationEngine extends Analyser {
         else{
             return;
         }
+    }
+
+    public static void compileStatements() throws IOException{
+        
+        String line = readLine(pointer);
+        if(getTokenType(line) == "keyword" && getKeywordType(line) == "let"){
+            compileLet();
+        }
+        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "if"){
+            compileIf();
+        }
+        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "while"){
+            compileWhile();
+        }
+        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "do"){
+            compileDo();
+        }
+        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "return"){
+            compileReturn();
+        }
+        else{
+            return;
+        }
+        compileStatements();
     }
 
     public static void compileLet() throws IOException{
@@ -396,30 +423,6 @@ public class CompilationEngine extends Analyser {
         }   
         compileExpression();
         fw.append("</letStatement>\n");
-    }
-
-    public static void compileStatements() throws IOException{
-        
-        String line = readLine(pointer);
-        if(getTokenType(line) == "keyword" && getKeywordType(line) == "let"){
-            compileLet();
-        }
-        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "if"){
-            compileIf();
-        }
-        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "while"){
-            compileWhile();
-        }
-        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "do"){
-            compileDo();
-        }
-        else if(getTokenType(line) == "keyword" && getKeywordType(line) == "return"){
-            compileReturn();
-        }
-        else{
-            return;
-        }
-        compileStatements();
     }
 
     public static void compileIf() throws IOException{

@@ -43,13 +43,11 @@
 <symbol> . </symbol>
 <identifier> readInt </identifier>
 <symbol> ( </symbol>
-<expressionList>
 <expression>
 <term>
 <stringConstant> HOW MANY NUMBERS?  </stringConstant>
 </term>
 </expression>
-</expressionList>
 <symbol> ) </symbol>
 </term>
 </expression>
@@ -65,13 +63,11 @@
 <symbol> . </symbol>
 <identifier> new </identifier>
 <symbol> ( </symbol>
-<expressionList>
 <expression>
 <term>
 <identifier> length </identifier>
 </term>
 </expression>
-</expressionList>
 <symbol> ) </symbol>
 </term>
 </expression>
@@ -120,13 +116,11 @@
 <symbol> . </symbol>
 <identifier> readInt </identifier>
 <symbol> ( </symbol>
-<expressionList>
 <expression>
 <term>
 <stringConstant> ENTER THE NEXT NUMBER:  </stringConstant>
 </term>
 </expression>
-</expressionList>
 <symbol> ) </symbol>
 </term>
 </expression>

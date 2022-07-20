@@ -10,7 +10,7 @@ public class Main{
     }
 
     public static String passFilename(){
-        String fileName = "./TokenizedFiles/Square.xml";
+        String fileName = "./TokenizedFiles/SquareT.xml";
         return fileName;
     }
 

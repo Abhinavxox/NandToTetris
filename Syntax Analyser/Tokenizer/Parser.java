@@ -21,7 +21,7 @@ public class Parser extends Library{
             // Ignores empty lines
             if (!line.isEmpty()) {
                 // Ignores comments
-                if(line.charAt(0)!='/'){
+                if(line.charAt(0)!='/' && !line.contains("/*")){
                     arr = line.split("//");
                     fileData.add(arr[0]);
                 }
