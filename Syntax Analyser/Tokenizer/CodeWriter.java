@@ -1,3 +1,5 @@
+package Tokenizer;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,7 +10,7 @@ public class CodeWriter{
 
     public static void writeCode(ArrayList<String[]> alist, String filename) throws IOException{
         //write to a file
-        File file = new File(filename+"AIE21088.xml");
+        File file = new File("./TokenizedFiles/"+filename+"T.xml");
 		FileWriter fr = new FileWriter(file, false);
 		BufferedWriter br = new BufferedWriter(fr);
 		br.write("<tokens>\n");

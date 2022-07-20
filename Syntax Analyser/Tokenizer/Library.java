@@ -1,3 +1,5 @@
+package Tokenizer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -60,8 +62,23 @@ class Library{
         }
         //if it is a symbol
         else if(symbols.contains(token)){
-            String arr2[] = {token,"symbol"};
-            arr1 = arr2;
+            if(token.equals("<")){
+                String arr2[] = {"&lt;","symbol"};
+                arr1 = arr2;
+            }
+            else if(token.equals(">")){
+                String arr2[] = {"&gt;","symbol"};
+                arr1 = arr2;
+            }
+            else if(token.equals("&")){
+                String arr2[] = {"&amp;","symbol"};
+                arr1 = arr2;
+            }
+            else{
+                String arr2[] = {token,"symbol"};
+                arr1 = arr2;
+            }
+            
         }
         //if it is a keyword 
         else if(keyword.contains(token)){
