@@ -63,6 +63,7 @@ public class CompilationEngine extends Analyser {
             System.out.println("Error: Expected static or field");
             return;
         }
+        //append static or field
         fw.append(line+"\n");
         pointer++;
 
@@ -222,6 +223,7 @@ public class CompilationEngine extends Analyser {
 
     public static void compileVarDec() throws IOException{
         String line = readLine(pointer);
+        //if this line is doesnt start with var, then return to compileSubroutineBody
         if(getTokenType(line) != "keyword" || getKeywordType(line) != "var"){
             return;
         }
@@ -428,6 +430,7 @@ public class CompilationEngine extends Analyser {
     public static void compileIf() throws IOException{
         fw.append("<ifStatement>\n");
         String line = readLine(pointer);
+
         if(getTokenType(line) == "keyword" && getKeywordType(line) == "if"){
             fw.append(line+"\n");
             pointer++;
@@ -436,6 +439,7 @@ public class CompilationEngine extends Analyser {
             System.out.println("Error: Expected if");
             return;
         }
+
         line = readLine(pointer);
         if(getTokenType(line) == "symbol" && getSymbolType(line) == "("){
             fw.append(line+"\n");
@@ -444,7 +448,9 @@ public class CompilationEngine extends Analyser {
         else{
             System.out.println("Error: Expected (");
         }
+
         compileExpression();
+
         line = readLine(pointer);
         if(getTokenType(line) == "symbol" && getSymbolType(line) == ")"){
             fw.append(line+"\n");
@@ -453,6 +459,7 @@ public class CompilationEngine extends Analyser {
         else{
             System.out.println("Error: Expected )");
         }
+
         line = readLine(pointer);
         if(getTokenType(line) == "symbol" && getSymbolType(line) == "{"){
             fw.append(line+"\n");
@@ -461,9 +468,11 @@ public class CompilationEngine extends Analyser {
         else{
             System.out.println("Error: Expected {");
         }
+        
         fw.append("<statements>\n");
         compileStatements();
         fw.append("</statements>\n");
+
         line = readLine(pointer);
         if(getTokenType(line) == "symbol" && getSymbolType(line) == "}"){
             fw.append(line+"\n");
@@ -472,6 +481,7 @@ public class CompilationEngine extends Analyser {
         else{
             System.out.println("Error: Expected }");
         }
+
         line = readLine(pointer);
         if(getTokenType(line) == "keyword" && getKeywordType(line) == "else"){
             fw.append(line+"\n");
@@ -484,7 +494,9 @@ public class CompilationEngine extends Analyser {
             else{
                 System.out.println("Error: Expected {");
             }
+            fw.append("<statements>\n");
             compileStatements();
+            fw.append("</statements>\n");
             line = readLine(pointer);
             if(getTokenType(line) == "symbol" && getSymbolType(line) == "}"){
                 fw.append(line+"\n");
